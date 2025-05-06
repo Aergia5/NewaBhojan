@@ -1,0 +1,13 @@
+RewriteEngine On
+RewriteBase /newabhojan/
+
+# API endpoints
+RewriteRule ^api/menu$ menu.php [L,QSA]
+RewriteRule ^api/auth/(.*)$ auth.php?action=$1 [L,QSA]
+RewriteRule ^api/orders$ orders.php [L,QSA]
+
+# Frontend routes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L]
+
