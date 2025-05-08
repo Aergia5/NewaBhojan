@@ -76,12 +76,13 @@ try {
         $paymentMethod = htmlspecialchars($input['paymentMethod']);
         $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         
+        // Updated query to use 'total_amount' instead of 'total'
         $stmt = $pdo->prepare("INSERT INTO orders (
             user_id, customer_name, customer_phone, delivery_address, 
             special_instructions, subtotal, delivery_fee, total_amount, 
-            payment_method, status
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')");
-        
+            payment_method, status, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending', NOW())");
+
         $stmt->execute([
             $userId, $customerName, $phone, $address, 
             $instructions, $subtotal, $deliveryFee, $total, 
@@ -116,6 +117,7 @@ try {
     http_response_code(400);
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
+        'errorDetails' => $e->getTraceAsString() // Remove in production
     ]);
 }

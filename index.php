@@ -191,6 +191,35 @@ session_start();
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        /* Cart item styles */
+        .cart-item {
+            display: flex;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.25rem;
+        }
+        
+        .quantity-btn {
+            padding: 0.25rem 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .quantity-value {
+            padding: 0 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -237,184 +266,6 @@ session_start();
         </div>
     </header>
 
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal">
-        <div class="modal-container">
-            <div class="flex justify-between items-center mb-6">
-                <div class="auth-tabs">
-                    <div id="loginTab" class="auth-tab active">Login</div>
-                    <div id="signupTab" class="auth-tab">Sign Up</div>
-                </div>
-                <button id="closeAuthModal" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            
-            <!-- Login Form -->
-            <form id="loginForm" class="auth-form active">
-                <div class="form-group">
-                    <label for="loginEmail" class="form-label">Email Address</label>
-                    <input type="email" id="loginEmail" name="email" required class="form-input">
-                </div>
-                
-                <div class="form-group">
-                    <label for="loginPassword" class="form-label">Password</label>
-                    <input type="password" id="loginPassword" name="password" required class="form-input">
-                </div>
-                
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md font-medium mb-4">
-                    <span id="loginBtnText">Login</span>
-                    <span id="loginSpinner" class="spinner hidden"></span>
-                </button>
-                
-                <div class="text-center">
-                    <a href="#" id="forgotPasswordLink" class="text-red-600 hover:underline text-sm">Forgot password?</a>
-                </div>
-            </form>
-            
-            <!-- Signup Form -->
-            <form id="signupForm" class="auth-form" style="display: none;">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div class="form-group">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" id="firstName" name="firstName" required class="form-input">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" id="lastName" name="lastName" required class="form-input">
-                    </div>
-                </div>
-                
-                <div class="form-group mb-4">
-                    <label for="signupEmail" class="form-label">Email Address</label>
-                    <input type="email" id="signupEmail" name="email" required class="form-input">
-                </div>
-                
-                <div class="form-group mb-4">
-                    <label for="signupPassword" class="form-label">Password</label>
-                    <input type="password" id="signupPassword" name="password" required class="form-input">
-                </div>
-                
-                <div class="form-group mb-4">
-                    <label for="confirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required class="form-input">
-                </div>
-                
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md font-medium">
-                    <span id="signupBtnText">Create Account</span>
-                    <span id="signupSpinner" class="spinner hidden"></span>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Forgot Password Modal -->
-    <div id="forgotPasswordModal" class="modal">
-        <div class="modal-container">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Reset Password</h2>
-                <button id="closeForgotPasswordModal" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            
-            <form id="forgotPasswordForm">
-                <div class="form-group mb-4">
-                    <label for="forgotEmail" class="form-label">Email Address</label>
-                    <input type="email" id="forgotEmail" name="email" required class="form-input">
-                </div>
-                
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-md font-medium mb-4">
-                    <span id="forgotBtnText">Send Reset Link</span>
-                    <span id="forgotSpinner" class="spinner hidden"></span>
-                </button>
-                
-                <div class="text-center">
-                    <p class="text-gray-600">Remember your password? <a href="#" id="backToLoginLink" class="text-red-600 hover:underline">Back to login</a></p>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Checkout Modal -->
-    <div id="checkoutModal" class="modal">
-        <div class="modal-container">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">Checkout</h2>
-                <button id="closeCheckoutModal" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            
-            <form id="checkoutForm">
-                <div class="mb-6">
-                    <h3 class="text-lg font-bold mb-4">Delivery Information</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div class="form-group">
-                            <label for="checkoutFirstName" class="form-label">First Name</label>
-                            <input type="text" id="checkoutFirstName" name="firstName" required class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <label for="checkoutLastName" class="form-label">Last Name</label>
-                            <input type="text" id="checkoutLastName" name="lastName" required class="form-input">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group mb-4">
-                        <label for="checkoutPhone" class="form-label">Phone Number</label>
-                        <input type="tel" id="checkoutPhone" name="phone" required class="form-input">
-                    </div>
-                    
-                    <div class="form-group mb-4">
-                        <label for="checkoutAddress" class="form-label">Delivery Address</label>
-                        <textarea id="checkoutAddress" name="address" rows="3" required class="form-input"></textarea>
-                    </div>
-                    
-                    <div class="form-group mb-4">
-                        <label for="checkoutInstructions" class="form-label">Delivery Instructions (Optional)</label>
-                        <textarea id="checkoutInstructions" name="instructions" rows="2" class="form-input"></textarea>
-                    </div>
-                </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-lg font-bold mb-4">Payment Method</h3>
-                    
-                    <div class="space-y-2">
-                        <div class="flex items-center">
-                            <input type="radio" id="cashOnDelivery" name="paymentMethod" value="cash" checked class="mr-2">
-                            <label for="cashOnDelivery">Cash on Delivery</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="khalti" name="paymentMethod" value="khalti" class="mr-2">
-                            <label for="khalti">Khalti</label>
-                        </div>
-                        <div class="flex items-center">
-                            <input type="radio" id="esewa" name="paymentMethod" value="esewa" class="mr-2">
-                            <label for="esewa">eSewa</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-lg font-bold mb-4">Order Summary</h3>
-                    <div id="checkoutOrderSummary">
-                        <!-- Order items will be dynamically inserted here -->
-                    </div>
-                    <div class="order-total flex justify-between">
-                        <span>Total:</span>
-                        <span id="checkoutTotal">Rs 0</span>
-                    </div>
-                </div>
-                
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-md font-medium">
-                    <span id="checkoutBtnText">Place Order</span>
-                    <span id="checkoutSpinner" class="spinner hidden"></span>
-                </button>
-            </form>
-        </div>
-    </div>
-
     <!-- Hero Section -->
     <section id="home" class="hero text-white py-20">
         <div class="container mx-auto px-4 text-center">
@@ -443,6 +294,10 @@ session_start();
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="foodItemsContainer">
                 <!-- Menu items will be loaded dynamically -->
+                <div class="col-span-4 text-center py-12">
+                    <i class="fas fa-spinner fa-spin text-2xl text-red-600"></i>
+                    <p class="mt-2">Loading menu...</p>
+                </div>
             </div>
         </div>
     </section>
@@ -565,6 +420,85 @@ session_start();
         </div>
     </div>
 
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-container">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Checkout</h2>
+                <button id="closeCheckoutModal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <form id="checkoutForm">
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-4">Delivery Information</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="form-group">
+                            <label for="checkoutFirstName" class="form-label">First Name</label>
+                            <input type="text" id="checkoutFirstName" name="firstName" required class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="checkoutLastName" class="form-label">Last Name</label>
+                            <input type="text" id="checkoutLastName" name="lastName" required class="form-input">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <label for="checkoutPhone" class="form-label">Phone Number</label>
+                        <input type="tel" id="checkoutPhone" name="phone" required class="form-input">
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <label for="checkoutAddress" class="form-label">Delivery Address</label>
+                        <textarea id="checkoutAddress" name="address" rows="3" required class="form-input"></textarea>
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <label for="checkoutInstructions" class="form-label">Delivery Instructions (Optional)</label>
+                        <textarea id="checkoutInstructions" name="instructions" rows="2" class="form-input"></textarea>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-4">Payment Method</h3>
+                    
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <input type="radio" id="cashOnDelivery" name="paymentMethod" value="cash" checked class="mr-2">
+                            <label for="cashOnDelivery">Cash on Delivery</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="khalti" name="paymentMethod" value="khalti" class="mr-2">
+                            <label for="khalti">Khalti</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="esewa" name="paymentMethod" value="esewa" class="mr-2">
+                            <label for="esewa">eSewa</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-bold mb-4">Order Summary</h3>
+                    <div id="checkoutOrderSummary">
+                        <!-- Order items will be dynamically inserted here -->
+                    </div>
+                    <div class="order-total flex justify-between">
+                        <span>Total:</span>
+                        <span id="checkoutTotal">Rs 0</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-md font-medium">
+                    <span id="checkoutBtnText">Place Order</span>
+                    <span id="checkoutSpinner" class="spinner hidden"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div id="notificationToast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-lg hidden">
         <div class="flex items-center">
@@ -585,6 +519,13 @@ session_start();
         // API Configuration
         const API_BASE_URL = window.location.origin + '/newabhojan';
         const AUTH_TOKEN = '<?php echo isset($_SESSION['auth_token']) ? $_SESSION['auth_token'] : ''; ?>';
+
+        // Helper function to ensure elements exist
+        function getElementOrThrow(id) {
+            const el = document.getElementById(id);
+            if (!el) throw new Error(`Element with ID ${id} not found`);
+            return el;
+        }
 
         // Helper function for API calls
         async function makeApiRequest(endpoint, method = 'GET', data = null) {
@@ -623,13 +564,8 @@ session_start();
 
         // Show notification
         function showNotification(message, type = 'success') {
-            const toast = document.getElementById('notificationToast');
-            const messageEl = document.getElementById('notificationMessage');
-            
-            if (!toast || !messageEl) {
-                console.error('Notification elements not found');
-                return;
-            }
+            const toast = getElementOrThrow('notificationToast');
+            const messageEl = getElementOrThrow('notificationMessage');
             
             toast.className = `fixed bottom-4 right-4 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white px-6 py-3 rounded-md shadow-lg flex items-center`;
             messageEl.textContent = message;
@@ -707,9 +643,7 @@ session_start();
         // Load menu items from API
         async function loadMenuItems() {
             try {
-                const container = document.getElementById('foodItemsContainer');
-                if (!container) return;
-                
+                const container = getElementOrThrow('foodItemsContainer');
                 container.innerHTML = '<div class="col-span-4 text-center py-12"><i class="fas fa-spinner fa-spin text-2xl text-red-600"></i><p class="mt-2">Loading menu...</p></div>';
                 
                 const response = await makeApiRequest('/api/menu');
@@ -790,10 +724,7 @@ session_start();
             }
             
             cartCount++;
-            if (cartBadge) {
-                cartBadge.textContent = cartCount;
-                cartBadge.classList.remove('hidden');
-            }
+            updateCartBadge();
             updateCartUI();
             
             showNotification(`${item.name} added to cart!`);
@@ -804,24 +735,16 @@ session_start();
                 const removedItem = cart[index];
                 cartCount -= removedItem.quantity;
                 cart.splice(index, 1);
-                if (cartBadge) {
-                    cartBadge.textContent = cartCount;
-                    if (cartCount === 0) cartBadge.classList.add('hidden');
-                }
+                updateCartBadge();
                 updateCartUI();
                 showNotification(`${removedItem.name} removed`, 'error');
             }
         }
 
         function updateCartUI() {
-            const cartItemsContainer = document.getElementById('cartItems');
-            const emptyCartMessage = document.getElementById('emptyCartMessage');
-            const cartSummary = document.getElementById('cartSummary');
-            
-            if (!cartItemsContainer || !emptyCartMessage || !cartSummary) {
-                console.error('Cart elements not found');
-                return;
-            }
+            const cartItemsContainer = getElementOrThrow('cartItems');
+            const emptyCartMessage = getElementOrThrow('emptyCartMessage');
+            const cartSummary = getElementOrThrow('cartSummary');
             
             cartItemsContainer.innerHTML = '';
             
@@ -844,21 +767,21 @@ session_start();
                 const cartItem = document.createElement('div');
                 cartItem.className = 'cart-item';
                 cartItem.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" class="cart-item-image">
-                    <div class="cart-item-details">
-                        <h4 class="cart-item-title">${item.name}</h4>
-                        <p class="cart-item-price">Rs ${item.price.toFixed(2)}</p>
-                        <div class="cart-item-actions">
-                            <div class="quantity-control">
-                                <button class="quantity-btn decrease-quantity" data-index="${index}">
-                                    <i class="fas fa-minus"></i>
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded">
+                    <div class="ml-4 flex-grow">
+                        <h4 class="font-medium">${item.name}</h4>
+                        <p class="text-gray-600 text-sm">Rs ${item.price.toFixed(2)}</p>
+                        <div class="flex items-center mt-2">
+                            <div class="flex items-center border rounded">
+                                <button class="decrease-quantity px-2 py-1" data-index="${index}">
+                                    <i class="fas fa-minus text-xs"></i>
                                 </button>
-                                <span class="quantity-value">${item.quantity}</span>
-                                <button class="quantity-btn increase-quantity" data-index="${index}">
-                                    <i class="fas fa-plus"></i>
+                                <span class="quantity-value px-2">${item.quantity}</span>
+                                <button class="increase-quantity px-2 py-1" data-index="${index}">
+                                    <i class="fas fa-plus text-xs"></i>
                                 </button>
                             </div>
-                            <button class="remove-item-btn" data-index="${index}">
+                            <button class="remove-item-btn ml-4 text-red-600" data-index="${index}">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </div>
@@ -867,89 +790,60 @@ session_start();
                 cartItemsContainer.appendChild(cartItem);
             });
             
-            const deliveryFee = 50;
-            const total = subtotal + deliveryFee;
-            
-            document.getElementById('subtotal').textContent = `Rs ${subtotal.toFixed(2)}`;
-            document.getElementById('total').textContent = `Rs ${total.toFixed(2)}`;
-            
             // Add event listeners to dynamic elements
-            document.querySelectorAll('.remove-item-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    removeFromCart(parseInt(this.getAttribute('data-index')));
-                });
-            });
-            
             document.querySelectorAll('.increase-quantity').forEach(button => {
                 button.addEventListener('click', function() {
                     const index = parseInt(this.getAttribute('data-index'));
-                    cart[index].quantity++;
-                    cartCount++;
-                    updateCartUI();
+                    if (cart[index]) {
+                        cart[index].quantity++;
+                        cartCount++;
+                        updateCartUI();
+                        updateCartBadge();
+                    }
                 });
             });
             
             document.querySelectorAll('.decrease-quantity').forEach(button => {
                 button.addEventListener('click', function() {
                     const index = parseInt(this.getAttribute('data-index'));
-                    if (cart[index].quantity > 1) {
-                        cart[index].quantity--;
-                        cartCount--;
-                    } else {
-                        removeFromCart(index);
+                    if (cart[index]) {
+                        if (cart[index].quantity > 1) {
+                            cart[index].quantity--;
+                            cartCount--;
+                        } else {
+                            removeFromCart(index);
+                        }
+                        updateCartUI();
+                        updateCartBadge();
                     }
-                    updateCartUI();
                 });
             });
-        }
-
-        // Cart modal controls
-        const cartIcon = document.getElementById('cartIcon');
-        const cartModal = document.getElementById('cartModal');
-        const closeCart = document.getElementById('closeCart');
-        
-        if (cartIcon && cartModal) {
-            cartIcon.addEventListener('click', () => {
-                cartModal.classList.remove('hidden');
-                body.classList.add('no-scroll');
-                updateCartUI();
-            });
-        }
-        
-        if (closeCart && cartModal) {
-            closeCart.addEventListener('click', () => {
-                cartModal.classList.add('hidden');
-                body.classList.remove('no-scroll');
-            });
-        }
-        
-        if (cartModal) {
-            cartModal.addEventListener('click', (e) => {
-                if (e.target === cartModal) {
-                    cartModal.classList.add('hidden');
-                    body.classList.remove('no-scroll');
-                }
-            });
-        }
-
-        // Proceed to Checkout
-        const proceedToCheckout = document.getElementById('proceedToCheckout');
-        if (proceedToCheckout) {
-            proceedToCheckout.addEventListener('click', () => {
-                if (cart.length === 0) {
-                    showNotification('Your cart is empty!', 'error');
-                    return;
-                }
-                updateCheckoutOrderSummary();
-                document.getElementById('checkoutModal')?.classList.add('open');
-                body.classList.add('no-scroll');
-            });
-        }
-
-        function updateCheckoutOrderSummary() {
-            const checkoutOrderSummary = document.getElementById('checkoutOrderSummary');
-            if (!checkoutOrderSummary) return;
             
+            document.querySelectorAll('.remove-item-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    removeFromCart(index);
+                });
+            });
+            
+            // Update totals
+            const deliveryFee = 50;
+            const total = subtotal + deliveryFee;
+            
+            document.getElementById('subtotal').textContent = `Rs ${subtotal.toFixed(2)}`;
+            document.getElementById('total').textContent = `Rs ${total.toFixed(2)}`;
+        }
+
+        function updateCartBadge() {
+            if (cartBadge) {
+                cartBadge.textContent = cartCount;
+                cartBadge.classList.toggle('hidden', cartCount === 0);
+            }
+        }
+
+        // Update checkout order summary
+        function updateCheckoutOrderSummary() {
+            const checkoutOrderSummary = getElementOrThrow('checkoutOrderSummary');
             checkoutOrderSummary.innerHTML = '';
             let subtotal = 0;
             
@@ -980,207 +874,40 @@ session_start();
             document.getElementById('checkoutTotal').textContent = `Rs ${total.toFixed(2)}`;
         }
 
-        // Auth Modal Functionality
-        const authModal = document.getElementById('authModal');
-        const authButton = document.getElementById('authButton');
-        const mobileAuthButton = document.getElementById('mobileAuthButton');
-        const closeAuthModal = document.getElementById('closeAuthModal');
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const loginTab = document.getElementById('loginTab');
-        const signupTab = document.getElementById('signupTab');
-        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
-        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
-        const closeForgotPasswordModal = document.getElementById('closeForgotPasswordModal');
-        const backToLoginLink = document.getElementById('backToLoginLink');
-        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-        const checkoutForm = document.getElementById('checkoutForm');
-        const closeCheckoutModal = document.getElementById('closeCheckoutModal');
-
-        // Auth modal toggle
-        function showLoginForm() {
-            if (loginTab) loginTab.classList.add('active');
-            if (signupTab) signupTab.classList.remove('active');
-            if (loginForm) loginForm.style.display = 'block';
-            if (signupForm) signupForm.style.display = 'none';
-        }
-
-        function showSignupForm() {
-            if (loginTab) loginTab.classList.remove('active');
-            if (signupTab) signupTab.classList.add('active');
-            if (loginForm) loginForm.style.display = 'none';
-            if (signupForm) signupForm.style.display = 'block';
-        }
-
-        // Open auth modal
-        if (authButton) {
-            authButton.addEventListener('click', () => {
-                if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
-                    window.location.href = '#profile';
-                } else if (authModal) {
-                    authModal.classList.add('open');
-                    body.classList.add('no-scroll');
-                    showLoginForm();
-                }
+        // Initialize cart functionality
+        function initCart() {
+            // Cart icon click handler
+            document.getElementById('cartIcon')?.addEventListener('click', () => {
+                document.getElementById('cartModal')?.classList.remove('hidden');
+                body.classList.add('no-scroll');
+                updateCartUI();
             });
-        }
 
-        if (mobileAuthButton) {
-            mobileAuthButton.addEventListener('click', () => {
-                if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
-                    window.location.href = '#profile';
-                } else if (authModal) {
-                    authModal.classList.add('open');
-                    body.classList.add('no-scroll');
-                    const mobileMenu = document.getElementById('mobileMenu');
-                    if (mobileMenu) mobileMenu.classList.remove('open');
-                    showLoginForm();
-                }
-            });
-        }
-
-        // Close auth modal
-        if (closeAuthModal && authModal) {
-            closeAuthModal.addEventListener('click', () => {
-                authModal.classList.remove('open');
+            // Close cart handler
+            document.getElementById('closeCart')?.addEventListener('click', () => {
+                document.getElementById('cartModal')?.classList.add('hidden');
                 body.classList.remove('no-scroll');
             });
-        }
 
-        // Switch between login/signup tabs
-        if (loginTab) {
-            loginTab.addEventListener('click', showLoginForm);
-        }
-
-        if (signupTab) {
-            signupTab.addEventListener('click', showSignupForm);
-        }
-
-        // Forgot password modal
-        if (forgotPasswordLink && forgotPasswordModal) {
-            forgotPasswordLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (authModal) authModal.classList.remove('open');
-                forgotPasswordModal.classList.add('open');
-            });
-        }
-
-        if (closeForgotPasswordModal && forgotPasswordModal) {
-            closeForgotPasswordModal.addEventListener('click', () => {
-                forgotPasswordModal.classList.remove('open');
-            });
-        }
-
-        if (backToLoginLink && forgotPasswordModal && authModal) {
-            backToLoginLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                forgotPasswordModal.classList.remove('open');
-                authModal.classList.add('open');
-                showLoginForm();
-            });
-        }
-
-        // Form submissions
-        if (loginForm) {
-            loginForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('loginEmail')?.value;
-                const password = document.getElementById('loginPassword')?.value;
-                
-                if (!email || !password) {
-                    showNotification('Email and password are required', 'error');
+            // Proceed to checkout handler
+            document.getElementById('proceedToCheckout')?.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showNotification('Your cart is empty!', 'error');
                     return;
                 }
-                
-                try {
-                    toggleLoading('login', true);
-                    const response = await makeApiRequest('/api/auth/login', 'POST', {
-                        action: 'login',
-                        email,
-                        password
-                    });
-                    
-                    showNotification('Login successful!', 'success');
-                    setTimeout(() => window.location.reload(), 1500);
-                } catch (error) {
-                    console.error('Login error:', error);
-                } finally {
-                    toggleLoading('login', false);
-                }
+                updateCheckoutOrderSummary();
+                document.getElementById('checkoutModal')?.classList.add('open');
+                body.classList.add('no-scroll');
             });
-        }
 
-        if (signupForm) {
-            signupForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const firstName = document.getElementById('firstName')?.value;
-                const lastName = document.getElementById('lastName')?.value;
-                const email = document.getElementById('signupEmail')?.value;
-                const password = document.getElementById('signupPassword')?.value;
-                const confirmPassword = document.getElementById('confirmPassword')?.value;
-                
-                if (!firstName || !lastName || !email || !password || !confirmPassword) {
-                    showNotification('All fields are required', 'error');
-                    return;
-                }
-                
-                if (password !== confirmPassword) {
-                    showNotification('Passwords do not match', 'error');
-                    return;
-                }
-                
-                try {
-                    toggleLoading('signup', true);
-                    const response = await makeApiRequest('/api/auth/signup', 'POST', {
-                        action: 'signup',
-                        firstName,
-                        lastName,
-                        email,
-                        password,
-                        confirmPassword
-                    });
-                    
-                    showNotification('Account created! Please login.', 'success');
-                    showLoginForm();
-                    signupForm.reset();
-                } catch (error) {
-                    console.error('Signup error:', error);
-                } finally {
-                    toggleLoading('signup', false);
-                }
+            // Close checkout modal handler
+            document.getElementById('closeCheckoutModal')?.addEventListener('click', () => {
+                document.getElementById('checkoutModal')?.classList.remove('open');
+                body.classList.remove('no-scroll');
             });
-        }
 
-        if (forgotPasswordForm) {
-            forgotPasswordForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('forgotEmail')?.value;
-                
-                if (!email) {
-                    showNotification('Email is required', 'error');
-                    return;
-                }
-                
-                try {
-                    toggleLoading('forgot', true);
-                    const response = await makeApiRequest('/api/auth/forgot-password', 'POST', {
-                        action: 'forgot_password',
-                        email
-                    });
-                    
-                    showNotification('If email exists, reset link sent', 'success');
-                    forgotPasswordForm.reset();
-                    forgotPasswordModal.classList.remove('open');
-                } catch (error) {
-                    console.error('Forgot password error:', error);
-                } finally {
-                    toggleLoading('forgot', false);
-                }
-            });
-        }
-
-        if (checkoutForm) {
-            checkoutForm.addEventListener('submit', async (e) => {
+            // Checkout form submission
+            document.getElementById('checkoutForm')?.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
                 try {
@@ -1218,16 +945,13 @@ session_start();
                     // Clear cart
                     cart.length = 0;
                     cartCount = 0;
-                    if (cartBadge) {
-                        cartBadge.textContent = '0';
-                        cartBadge.classList.add('hidden');
-                    }
+                    updateCartBadge();
                     updateCartUI();
                     
                     document.getElementById('checkoutModal')?.classList.remove('open');
                     document.getElementById('cartModal')?.classList.add('hidden');
                     body.classList.remove('no-scroll');
-                    checkoutForm.reset();
+                    document.getElementById('checkoutForm')?.reset();
                 } catch (error) {
                     showNotification(error.message, 'error');
                 } finally {
@@ -1236,27 +960,21 @@ session_start();
             });
         }
 
-        // Close checkout modal
-        if (closeCheckoutModal) {
-            closeCheckoutModal.addEventListener('click', () => {
-                document.getElementById('checkoutModal')?.classList.remove('open');
-                body.classList.remove('no-scroll');
-            });
-        }
-
         // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
             loadMenuItems();
+            initCart();
             
             if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
-                if (authButton) authButton.textContent = 'My Account';
-                if (mobileAuthButton) mobileAuthButton.textContent = 'My Account';
+                if (document.getElementById('authButton')) {
+                    document.getElementById('authButton').textContent = 'My Account';
+                }
+                if (document.getElementById('mobileAuthButton')) {
+                    document.getElementById('mobileAuthButton').textContent = 'My Account';
+                }
             }
             
-            if (cartBadge) {
-                cartBadge.textContent = cartCount;
-                cartBadge.classList.toggle('hidden', cartCount === 0);
-            }
+            updateCartBadge();
         });
     </script>
 </body>
