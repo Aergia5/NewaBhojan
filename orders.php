@@ -1,94 +1,121 @@
 <?php
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
-// Clear any previous output
-if (ob_get_length()) ob_clean();
+// Disable error display
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+
+// Clear output buffers
+while (ob_get_level()) ob_end_clean();
 
 require_once 'db_connect.php';
 
 session_start();
 
-$action = $_POST['action'] ?? '';
-
-if ($action === 'place_order') {
-    // Get order data
-    $customerName = $_POST['firstName'] . ' ' . $_POST['lastName'];
-    $customerPhone = $_POST['phone'];
-    $deliveryAddress = $_POST['address'];
-    $deliveryInstructions = $_POST['instructions'] ?? '';
-    $paymentMethod = $_POST['paymentMethod'];
-    $cartItems = json_decode($_POST['cartItems'], true);
+try {
+    $input = json_decode(file_get_contents('php://input'), true);
+    
+    if (!$input) {
+        throw new Exception('Invalid input data');
+    }
+    
+    // Validate required fields
+    $required = ['firstName', 'lastName', 'phone', 'address', 'paymentMethod', 'items'];
+    foreach ($required as $field) {
+        if (empty($input[$field])) {
+            throw new Exception("$field is required");
+        }
+    }
+    
+    if (!is_array($input['items']) || count($input['items']) === 0) {
+        throw new Exception("At least one item is required");
+    }
     
     // Calculate totals
     $subtotal = 0;
-    foreach ($cartItems as $item) {
-        $subtotal += $item['price'] * $item['quantity'];
+    $items = [];
+    
+    foreach ($input['items'] as $item) {
+        if (empty($item['id']) || empty($item['quantity']) || $item['quantity'] < 1) {
+            throw new Exception("Invalid item data");
+        }
+        
+        // Verify item exists and get current price
+        $stmt = $pdo->prepare("SELECT item_id, price FROM menu_items WHERE item_id = ? AND is_available = TRUE");
+        $stmt->execute([$item['id']]);
+        $menuItem = $stmt->fetch();
+        
+        if (!$menuItem) {
+            throw new Exception("Item not available");
+        }
+        
+        $itemTotal = $menuItem['price'] * $item['quantity'];
+        $subtotal += $itemTotal;
+        
+        $items[] = [
+            'item_id' => $menuItem['item_id'],
+            'quantity' => $item['quantity'],
+            'price' => $menuItem['price']
+        ];
     }
-    $deliveryFee = 50; // Fixed delivery fee
+    
+    $deliveryFee = 50.00;
     $total = $subtotal + $deliveryFee;
     
-    // Get user ID if logged in
-    $userId = $_SESSION['user_id'] ?? null;
+    // Create order
+    $pdo->beginTransaction();
     
     try {
-        $pdo->beginTransaction();
+        $customerName = htmlspecialchars($input['firstName']) . ' ' . htmlspecialchars($input['lastName']);
+        $phone = htmlspecialchars($input['phone']);
+        $address = htmlspecialchars($input['address']);
+        $instructions = isset($input['instructions']) ? htmlspecialchars($input['instructions']) : '';
+        $paymentMethod = htmlspecialchars($input['paymentMethod']);
+        $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
         
-        // Insert order
-        $stmt = $pdo->prepare("INSERT INTO orders (user_id, customer_name, customer_phone, delivery_address, delivery_instructions, payment_method, subtotal, delivery_fee, total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$userId, $customerName, $customerPhone, $deliveryAddress, $deliveryInstructions, $paymentMethod, $subtotal, $deliveryFee, $total]);
+        $stmt = $pdo->prepare("INSERT INTO orders (
+            user_id, customer_name, customer_phone, delivery_address, 
+            special_instructions, subtotal, delivery_fee, total_amount, 
+            payment_method, status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')");
+        
+        $stmt->execute([
+            $userId, $customerName, $phone, $address, 
+            $instructions, $subtotal, $deliveryFee, $total, 
+            $paymentMethod
+        ]);
+        
         $orderId = $pdo->lastInsertId();
         
-        // Insert order items
-        $stmt = $pdo->prepare("INSERT INTO order_items (order_id, item_id, quantity, price_at_order) VALUES (?, ?, ?, ?)");
-        foreach ($cartItems as $item) {
-            $stmt->execute([$orderId, $item['id'], $item['quantity'], $item['price']]);
+        // Add order items
+        $stmt = $pdo->prepare("INSERT INTO order_items (
+            order_id, item_id, quantity, price_at_order
+        ) VALUES (?, ?, ?, ?)");
+        
+        foreach ($items as $item) {
+            $stmt->execute([$orderId, $item['item_id'], $item['quantity'], $item['price']]);
         }
         
         $pdo->commit();
         
-        echo json_encode(['success' => true, 'message' => 'Order placed successfully', 'orderId' => $orderId]);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Order placed successfully',
+            'orderId' => $orderId,
+            'total' => $total
+        ]);
     } catch (Exception $e) {
         $pdo->rollBack();
-        echo json_encode(['success' => false, 'message' => 'Failed to place order: ' . $e->getMessage()]);
-    }
-} elseif ($action === 'get_orders' && isset($_SESSION['user_id'])) {
-    // Get user's order history
-    $stmt = $pdo->prepare("SELECT o.*, 
-                          (SELECT COUNT(*) FROM order_items oi WHERE oi.order_id = o.order_id) as item_count
-                          FROM orders o 
-                          WHERE o.user_id = ?
-                          ORDER BY o.created_at DESC");
-    $stmt->execute([$_SESSION['user_id']]);
-    $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo json_encode(['success' => true, 'data' => $orders]);
-} elseif ($action === 'get_order_details' && isset($_POST['order_id'])) {
-    // Get order details
-    $orderId = $_POST['order_id'];
-    
-    // Verify the order belongs to the user (if logged in)
-    if (isset($_SESSION['user_id'])) {
-        $stmt = $pdo->prepare("SELECT 1 FROM orders WHERE order_id = ? AND user_id = ?");
-        $stmt->execute([$orderId, $_SESSION['user_id']]);
-        if (!$stmt->fetch()) {
-            echo json_encode(['success' => false, 'message' => 'Order not found']);
-            exit;
-        }
+        throw $e;
     }
     
-    // Get order items
-    $stmt = $pdo->prepare("SELECT oi.*, m.name, m.image_url 
-                          FROM order_items oi 
-                          JOIN menu_items m ON oi.item_id = m.item_id
-                          WHERE oi.order_id = ?");
-    $stmt->execute([$orderId]);
-    $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    echo json_encode(['success' => true, 'data' => $items]);
-} else {
-    echo json_encode(['success' => false, 'message' => 'Invalid action or unauthorized']);
+} catch (Exception $e) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
 }
-?>

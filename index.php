@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0); // Disable PHP error display on production
 session_start();
 ?>
 
@@ -51,10 +51,6 @@ session_start();
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
-        .nepali-font {
-            font-family: 'Preeti', sans-serif;
-        }
-        
         .cart-badge {
             position: absolute;
             top: -5px;
@@ -75,7 +71,6 @@ session_start();
             color: white;
         }
 
-        /* Mobile menu styles */
         .mobile-menu {
             max-height: 0;
             overflow: hidden;
@@ -87,12 +82,10 @@ session_start();
             transition: max-height 0.5s ease-in;
         }
 
-        /* Prevent scrolling when mobile menu is open */
         body.no-scroll {
             overflow: hidden;
         }
         
-        /* Animation for food cards */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -102,7 +95,6 @@ session_start();
             animation: fadeIn 0.5s ease-out forwards;
         }
         
-        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -131,7 +123,6 @@ session_start();
             overflow-y: auto;
         }
         
-        /* Form styles */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -157,7 +148,6 @@ session_start();
             box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
         }
         
-        /* Order summary styles */
         .order-summary-item {
             display: flex;
             justify-content: space-between;
@@ -171,7 +161,6 @@ session_start();
             font-weight: bold;
         }
         
-        /* Tab styles for auth forms */
         .auth-tabs {
             display: flex;
             border-bottom: 1px solid #e2e8f0;
@@ -190,111 +179,6 @@ session_start();
             color: #e53e3e;
         }
         
-        /* Cart modal styles */
-        #cartModal {
-            transition: all 0.3s ease;
-        }
-        
-        .cart-item-quantity {
-            display: flex;
-            align-items: center;
-            margin-top: 0.5rem;
-        }
-        
-        .quantity-btn {
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
-            cursor: pointer;
-        }
-        
-        .quantity-value {
-            margin: 0 0.5rem;
-            min-width: 20px;
-            text-align: center;
-        }
-        
-        /* Cart item styles */
-        .cart-item {
-            display: flex;
-            align-items: center;
-            padding: 1rem 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .cart-item-image {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 0.5rem;
-            margin-right: 1rem;
-        }
-        
-        .cart-item-details {
-            flex-grow: 1;
-        }
-        
-        .cart-item-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-        
-        .cart-item-price {
-            color: #e53e3e;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .cart-item-actions {
-            display: flex;
-            align-items: center;
-        }
-        
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            margin-right: 1rem;
-        }
-        
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
-            cursor: pointer;
-            border-radius: 0.25rem;
-        }
-        
-        .quantity-btn:hover {
-            background-color: #e2e8f0;
-        }
-        
-        .quantity-value {
-            margin: 0 0.5rem;
-            min-width: 20px;
-            text-align: center;
-        }
-        
-        .remove-item-btn {
-            color: #e53e3e;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.25rem;
-        }
-        
-        .remove-item-btn:hover {
-            color: #c53030;
-        }
-
-        /* Loading spinner */
         .spinner {
             width: 24px;
             height: 24px;
@@ -328,7 +212,7 @@ session_start();
             <div class="flex items-center space-x-4">
                 <div class="relative">
                     <i class="fas fa-shopping-cart text-2xl text-gray-700 cursor-pointer" id="cartIcon"></i>
-                    <span class="cart-badge">0</span>
+                    <span class="cart-badge hidden">0</span>
                 </div>
                 <button id="authButton" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition hidden md:block">
                     <?php echo isset($_SESSION['user_id']) ? 'My Account' : 'Login'; ?>
@@ -353,7 +237,7 @@ session_start();
         </div>
     </header>
 
-    <!-- Auth Modal (for both login and signup) -->
+    <!-- Auth Modal -->
     <div id="authModal" class="modal">
         <div class="modal-container">
             <div class="flex justify-between items-center mb-6">
@@ -542,239 +426,26 @@ session_start();
         </div>
     </section>
 
-<!-- Menu Section -->
-<section id="menu" class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Our Menu</h2>
-        
-        <!-- Menu Categories -->
-        <div class="flex flex-wrap justify-center gap-2 mb-8">
-            <button class="category-btn active px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="all">All Items</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="appetizers">Appetizers</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="main">Main Dishes</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="sweets">Sweets</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="beverages">Beverages</button>
-            <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="sets">Meal Sets</button>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="foodItemsContainer">
-            <!-- Appetizers -->
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="appetizers">
-                <img src="pic/Bara.jpg" alt="Bara" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Bara</h3>
-                    <p class="text-gray-600 mb-4">Savory lentil pancake, a Newari staple food often served with spicy chutney.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 250</span>
-                    </div>
-                </div>
+    <!-- Menu Section -->
+    <section id="menu" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Our Menu</h2>
+            
+            <!-- Menu Categories -->
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <button class="category-btn active px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="all">All Items</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="appetizers">Appetizers</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="main">Main Dishes</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="sweets">Sweets</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="beverages">Beverages</button>
+                <button class="category-btn px-4 py-2 rounded-full bg-gray-100 hover:bg-red-600 hover:text-white transition" data-category="sets">Meal Sets</button>
             </div>
             
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="appetizers">
-                <img src="pic/Chatamari.jpg" alt="Chatamari" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Chatamari</h3>
-                    <p class="text-gray-600 mb-4">Newari rice crepe topped with minced meat, eggs and spices - often called "Newari Pizza".</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 300</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="main">
-                <img src="pic/SamayBaji.jpg" alt="Samay Baji" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Samay Baji</h3>
-                    <p class="text-gray-600 mb-4">Traditional Newari platter with beaten rice, black soybeans, meat, ginger, garlic and more.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 280</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="appetizers">
-                <img src="pic/choila.jpg" alt="Choila" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Choila</h3>
-                    <p class="text-gray-600 mb-4">Spicy grilled buffalo meat marinated with traditional Newari spices and mustard oil.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 350</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Main Dishes -->
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="main">
-                <img src="pic/Newari Khaja Set.jpg" alt="Newari Khaja Set" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Newari Khaja Set</h3>
-                    <p class="text-gray-600 mb-4">Complete Newari meal with bara, choila, chatamari, aalu tama, and other side dishes.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 320</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="main">
-                <img src="pic/Aloo-tama.jpg" alt="Aalu Tama" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Aalu Tama</h3>
-                    <p class="text-gray-600 mb-4">Traditional Newari curry made with bamboo shoots, potatoes and black-eyed peas.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 280</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="appetizers">
-                <img src="pic/kachila.jpg" alt="Kachila" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Kachila</h3>
-                    <p class="text-gray-600 mb-4">Minced raw meat mixed with spices, mustard oil and beaten rice.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 420</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Sweets -->
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="sweets">
-                <img src="pic/Yomari.jpeg" alt="Yomari" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Yomari</h3>
-                    <p class="text-gray-600 mb-4">Sweet dumpling made of rice flour with chaku (molasses) filling, a festive delicacy.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 200</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="sweets">
-                <img src="pic/JujuDhau.jpg" alt="Juju Dhau" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Juju Dhau</h3>
-                    <p class="text-gray-600 mb-4">"King of Yogurt" - creamy, sweetened yogurt from Bhaktapur, served in clay pots.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 320</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="sweets">
-                <img src="pic/lakmari.jpg" alt="Lakhamari" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Lakhamari</h3>
-                    <p class="text-gray-600 mb-4">Traditional Newari sweet biscuit, often served during festivals and weddings.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 180</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="appetizers">
-                <img src="pic/Sanyakhuna.jpg" alt="Sanya Khuna" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Sanya Khuna</h3>
-                    <p class="text-gray-600 mb-4">Sweet rice pudding with jaggery, a traditional Newari dessert.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 220</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Beverages -->
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="beverages">
-                <img src="pic/aila.jpg" alt="Aila" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Aila</h3>
-                    <p class="text-gray-600 mb-4">Traditional Newari alcoholic beverage made from fermented rice, millet or grains.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 180</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="beverages">
-                <img src="pic/thwon.jpg" alt="Thwon" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Thwon</h3>
-                    <p class="text-gray-600 mb-4">Traditional Newari rice beer, mildly alcoholic with a sweet-sour taste.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 120</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Meal Sets -->
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="sets">
-                <img src="pic/Newari Khaja Set 2.jpg" alt="Newari Feast" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Newari Feast (For 2)</h3>
-                    <p class="text-gray-600 mb-4">Complete Newari feast including all appetizers, main dishes, and desserts for two people.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 850</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="food-card bg-white rounded-lg overflow-hidden shadow-md relative" data-category="sets">
-                <img src="pic/Newari Khaja Set 4.jpg" alt="Newari Family Set" class="w-full h-48 object-cover">
-                <div class="p-4">
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Newari Family Set (For 4)</h3>
-                    <p class="text-gray-600 mb-4">Complete Newari meal set for a family of four with variety of dishes and desserts.</p>
-                    <div class="flex justify-between items-center">
-                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition">
-                            Add to Cart
-                        </button>
-                        <span class="text-gray-500 text-sm">Rs 1200</span>
-                    </div>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="foodItemsContainer">
+                <!-- Menu items will be loaded dynamically -->
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Why Choose Us -->
     <section id="about" class="py-16 bg-gray-50">
@@ -866,7 +537,6 @@ session_start();
                 </div>
                 
                 <div class="space-y-4" id="cartItems">
-                    <!-- Cart items will be added here dynamically -->
                     <div class="text-center py-8 text-gray-500" id="emptyCartMessage">
                         <i class="fas fa-shopping-cart text-4xl mb-4"></i>
                         <p>Your cart is empty</p>
@@ -913,7 +583,7 @@ session_start();
         const body = document.body;
 
         // API Configuration
-        const API_BASE_URL = window.location.origin; // Adjust if your API is on a different domain
+        const API_BASE_URL = window.location.origin + '/newabhojan';
         const AUTH_TOKEN = '<?php echo isset($_SESSION['auth_token']) ? $_SESSION['auth_token'] : ''; ?>';
 
         // Helper function for API calls
@@ -937,16 +607,16 @@ session_start();
             
             try {
                 const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-                const responseData = await response.json();
                 
                 if (!response.ok) {
-                    throw new Error(responseData.message || 'Request failed');
+                    const errorData = await response.json().catch(() => null);
+                    throw new Error(errorData?.message || `Request failed with status ${response.status}`);
                 }
                 
-                return responseData;
+                return await response.json();
             } catch (error) {
                 console.error('API Error:', error);
-                showNotification(error.message, 'error');
+                showNotification(error.message || 'An error occurred', 'error');
                 throw error;
             }
         }
@@ -955,6 +625,11 @@ session_start();
         function showNotification(message, type = 'success') {
             const toast = document.getElementById('notificationToast');
             const messageEl = document.getElementById('notificationMessage');
+            
+            if (!toast || !messageEl) {
+                console.error('Notification elements not found');
+                return;
+            }
             
             toast.className = `fixed bottom-4 right-4 ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white px-6 py-3 rounded-md shadow-lg flex items-center`;
             messageEl.textContent = message;
@@ -966,14 +641,19 @@ session_start();
         }
 
         // Close notification
-        document.getElementById('closeNotification').addEventListener('click', function() {
-            document.getElementById('notificationToast').classList.add('hidden');
+        document.getElementById('closeNotification')?.addEventListener('click', function() {
+            document.getElementById('notificationToast')?.classList.add('hidden');
         });
 
         // Toggle loading state
         function toggleLoading(buttonId, isLoading) {
             const btnText = document.getElementById(`${buttonId}Text`);
             const spinner = document.getElementById(`${buttonId}Spinner`);
+            
+            if (!btnText || !spinner) {
+                console.error(`Loading elements not found for ${buttonId}`);
+                return;
+            }
             
             if (isLoading) {
                 btnText.classList.add('hidden');
@@ -988,84 +668,79 @@ session_start();
         const mobileMenuButton = document.getElementById('mobileMenuButton');
         const mobileMenu = document.getElementById('mobileMenu');
         
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('open');
-            body.classList.toggle('no-scroll');
-            
-            const icon = mobileMenuButton.querySelector('i');
-            if (mobileMenu.classList.contains('open')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        });
-
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('#mobileMenu a').forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.remove('open');
-                body.classList.remove('no-scroll');
-                mobileMenuButton.querySelector('i').classList.remove('fa-times');
-                mobileMenuButton.querySelector('i').classList.add('fa-bars');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('open');
+                body.classList.toggle('no-scroll');
+                
+                const icon = mobileMenuButton.querySelector('i');
+                if (mobileMenu.classList.contains('open')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
             });
-        });
+        }
 
         // Menu category filtering
         const categoryButtons = document.querySelectorAll('.category-btn');
         
-        categoryButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const category = this.dataset.category;
-                
-                // Update active button
-                categoryButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Filter food cards
-                document.querySelectorAll('.food-card').forEach(card => {
-                    if (category === 'all' || card.dataset.category === category) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+        if (categoryButtons.length > 0) {
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const category = this.dataset.category;
+                    
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.food-card').forEach(card => {
+                        card.style.display = (category === 'all' || card.dataset.category === category) 
+                            ? 'block' 
+                            : 'none';
+                    });
                 });
             });
-        });
+        }
 
         // Load menu items from API
         async function loadMenuItems() {
             try {
-                const response = await makeApiRequest('/newabhojan/api/menu');
                 const container = document.getElementById('foodItemsContainer');
-                container.innerHTML = '';
+                if (!container) return;
                 
-                if (response.data && response.data.length > 0) {
+                container.innerHTML = '<div class="col-span-4 text-center py-12"><i class="fas fa-spinner fa-spin text-2xl text-red-600"></i><p class="mt-2">Loading menu...</p></div>';
+                
+                const response = await makeApiRequest('/api/menu');
+                
+                if (response.data?.length > 0) {
+                    container.innerHTML = '';
+                    
                     response.data.forEach(item => {
                         const card = document.createElement('div');
                         card.className = 'food-card bg-white rounded-lg overflow-hidden shadow-md relative';
                         card.dataset.category = item.category_name.toLowerCase().replace(' ', '-');
                         
                         card.innerHTML = `
-                        <div class="flex flex-col h-full">
-                            <img src="${item.image_url}" alt="${item.name}" class="w-full h-40 object-cover">
-                            <div class="p-3 flex flex-col flex-grow">
-                                <h3 class="text-lg font-bold mb-1 text-gray-800 truncate">${item.name}</h3>
-                                <p class="text-gray-600 text-sm mb-3 line-clamp-2">${item.description}</p>
-                                <div class="mt-auto flex justify-between items-center">
-                                    <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md transition text-sm"
-                                            data-id="${item.item_id}" 
-                                            data-name="${item.name}" 
-                                            data-price="${item.price}" 
-                                            data-image="${item.image_url}">
-                                        Add to Cart
-                                    </button>
-                                    <span class="text-gray-500 text-sm font-medium">Rs ${item.price}</span>
+                            <div class="flex flex-col h-full">
+                                <img src="${item.image_url}" alt="${item.name}" class="w-full h-40 object-cover">
+                                <div class="p-3 flex flex-col flex-grow">
+                                    <h3 class="text-lg font-bold mb-1 text-gray-800 truncate">${item.name}</h3>
+                                    <p class="text-gray-600 text-sm mb-3 line-clamp-2">${item.description}</p>
+                                    <div class="mt-auto flex justify-between items-center">
+                                        <button class="add-to-cart bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md transition text-sm"
+                                                data-id="${item.item_id}" 
+                                                data-name="${item.name}" 
+                                                data-price="${item.price}" 
+                                                data-image="${item.image_url}">
+                                            Add to Cart
+                                        </button>
+                                        <span class="text-gray-500 text-sm font-medium">Rs ${item.price}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
+                        `;
                         
                         container.appendChild(card);
                     });
@@ -1086,18 +761,21 @@ session_start();
                     container.innerHTML = `
                         <div class="col-span-4 text-center py-12 text-gray-500">
                             <i class="fas fa-utensils text-4xl mb-4"></i>
-                            <p>No menu items available at the moment</p>
+                            <p>No menu items available</p>
                         </div>
                     `;
                 }
             } catch (error) {
                 console.error('Failed to load menu:', error);
-                document.getElementById('foodItemsContainer').innerHTML = `
-                    <div class="col-span-4 text-center py-12 text-gray-500">
-                        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-                        <p>Failed to load menu items. Please try again later.</p>
-                    </div>
-                `;
+                const container = document.getElementById('foodItemsContainer');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="col-span-4 text-center py-12 text-gray-500">
+                            <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+                            <p>Failed to load menu</p>
+                        </div>
+                    `;
+                }
             }
         }
 
@@ -1112,7 +790,10 @@ session_start();
             }
             
             cartCount++;
-            cartBadge.textContent = cartCount;
+            if (cartBadge) {
+                cartBadge.textContent = cartCount;
+                cartBadge.classList.remove('hidden');
+            }
             updateCartUI();
             
             showNotification(`${item.name} added to cart!`);
@@ -1123,10 +804,12 @@ session_start();
                 const removedItem = cart[index];
                 cartCount -= removedItem.quantity;
                 cart.splice(index, 1);
-                cartBadge.textContent = cartCount;
+                if (cartBadge) {
+                    cartBadge.textContent = cartCount;
+                    if (cartCount === 0) cartBadge.classList.add('hidden');
+                }
                 updateCartUI();
-                
-                showNotification(`${removedItem.name} removed from cart`, 'error');
+                showNotification(`${removedItem.name} removed`, 'error');
             }
         }
 
@@ -1134,6 +817,11 @@ session_start();
             const cartItemsContainer = document.getElementById('cartItems');
             const emptyCartMessage = document.getElementById('emptyCartMessage');
             const cartSummary = document.getElementById('cartSummary');
+            
+            if (!cartItemsContainer || !emptyCartMessage || !cartSummary) {
+                console.error('Cart elements not found');
+                return;
+            }
             
             cartItemsContainer.innerHTML = '';
             
@@ -1188,8 +876,7 @@ session_start();
             // Add event listeners to dynamic elements
             document.querySelectorAll('.remove-item-btn').forEach(button => {
                 button.addEventListener('click', function() {
-                    const index = parseInt(this.getAttribute('data-index'));
-                    removeFromCart(index);
+                    removeFromCart(parseInt(this.getAttribute('data-index')));
                 });
             });
             
@@ -1198,7 +885,6 @@ session_start();
                     const index = parseInt(this.getAttribute('data-index'));
                     cart[index].quantity++;
                     cartCount++;
-                    cartBadge.textContent = cartCount;
                     updateCartUI();
                 });
             });
@@ -1218,43 +904,53 @@ session_start();
         }
 
         // Cart modal controls
-        const cartModal = document.getElementById('cartModal');
         const cartIcon = document.getElementById('cartIcon');
+        const cartModal = document.getElementById('cartModal');
+        const closeCart = document.getElementById('closeCart');
         
-        cartIcon.addEventListener('click', function() {
-            cartModal.classList.remove('hidden');
-            body.classList.add('no-scroll');
-            updateCartUI();
-        });
-
-        document.getElementById('closeCart').addEventListener('click', function() {
-            cartModal.classList.add('hidden');
-            body.classList.remove('no-scroll');
-        });
-
-        cartModal.addEventListener('click', function(e) {
-            if (e.target === cartModal) {
+        if (cartIcon && cartModal) {
+            cartIcon.addEventListener('click', () => {
+                cartModal.classList.remove('hidden');
+                body.classList.add('no-scroll');
+                updateCartUI();
+            });
+        }
+        
+        if (closeCart && cartModal) {
+            closeCart.addEventListener('click', () => {
                 cartModal.classList.add('hidden');
                 body.classList.remove('no-scroll');
-            }
-        });
+            });
+        }
+        
+        if (cartModal) {
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.classList.add('hidden');
+                    body.classList.remove('no-scroll');
+                }
+            });
+        }
 
         // Proceed to Checkout
-        document.getElementById('proceedToCheckout').addEventListener('click', function() {
-            if (cart.length === 0) {
-                showNotification('Your cart is empty!', 'error');
-                return;
-            }
-            
-            updateCheckoutOrderSummary();
-            document.getElementById('checkoutModal').classList.add('open');
-            body.classList.add('no-scroll');
-        });
+        const proceedToCheckout = document.getElementById('proceedToCheckout');
+        if (proceedToCheckout) {
+            proceedToCheckout.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    showNotification('Your cart is empty!', 'error');
+                    return;
+                }
+                updateCheckoutOrderSummary();
+                document.getElementById('checkoutModal')?.classList.add('open');
+                body.classList.add('no-scroll');
+            });
+        }
 
         function updateCheckoutOrderSummary() {
             const checkoutOrderSummary = document.getElementById('checkoutOrderSummary');
-            checkoutOrderSummary.innerHTML = '';
+            if (!checkoutOrderSummary) return;
             
+            checkoutOrderSummary.innerHTML = '';
             let subtotal = 0;
             
             cart.forEach(item => {
@@ -1293,286 +989,273 @@ session_start();
         const signupForm = document.getElementById('signupForm');
         const loginTab = document.getElementById('loginTab');
         const signupTab = document.getElementById('signupTab');
-        
-        // Open auth modal
-        authButton.addEventListener('click', function() {
-            if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
-                // User is logged in - redirect to profile or show account info
-                window.location.href = '#profile'; // You should implement a profile page
-            } else {
-                authModal.classList.add('open');
-                body.classList.add('no-scroll');
-                showLoginForm();
-            }
-        });
-        
-        mobileAuthButton.addEventListener('click', function() {
-            if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
-                // User is logged in - redirect to profile or show account info
-                window.location.href = '#profile'; // You should implement a profile page
-            } else {
-                authModal.classList.add('open');
-                body.classList.add('no-scroll');
-                mobileMenu.classList.remove('open');
-                mobileMenuButton.querySelector('i').classList.remove('fa-times');
-                mobileMenuButton.querySelector('i').classList.add('fa-bars');
-                showLoginForm();
-            }
-        });
-        
-        // Close auth modal
-        closeAuthModal.addEventListener('click', function() {
-            authModal.classList.remove('open');
-            body.classList.remove('no-scroll');
-        });
-        
-        // Close auth modal when clicking outside
-        authModal.addEventListener('click', function(e) {
-            if (e.target === authModal) {
-                authModal.classList.remove('open');
-                body.classList.remove('no-scroll');
-            }
-        });
-        
-        // Switch between login and signup tabs
-        loginTab.addEventListener('click', function() {
-            showLoginForm();
-        });
-        
-        signupTab.addEventListener('click', function() {
-            showSignupForm();
-        });
-        
-        function showLoginForm() {
-            loginTab.classList.add('active');
-            signupTab.classList.remove('active');
-            loginForm.style.display = 'block';
-            signupForm.style.display = 'none';
-        }
-        
-        function showSignupForm() {
-            loginTab.classList.remove('active');
-            signupTab.classList.add('active');
-            loginForm.style.display = 'none';
-            signupForm.style.display = 'block';
-        }
-        
-        // Handle login form submission
-        loginForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!email || !password) {
-                showNotification('Email and password are required', 'error');
-                return;
-            }
-            
-            try {
-                toggleLoading('login', true);
-                
-                const response = await makeApiRequest('/auth/login', 'POST', {
-                    email,
-                    password
-                });
-                
-                showNotification('Login successful!', 'success');
-                
-                // Refresh the page to update session status
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-            } catch (error) {
-                console.error('Login error:', error);
-            } finally {
-                toggleLoading('login', false);
-            }
-        });
-        
-        // Handle signup form submission
-        signupForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            // Basic validation
-            if (!firstName || !lastName || !email || !password || !confirmPassword) {
-                showNotification('All fields are required', 'error');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showNotification('Passwords do not match', 'error');
-                return;
-            }
-            
-            if (password.length < 8) {
-                showNotification('Password must be at least 8 characters', 'error');
-                return;
-            }
-            
-            try {
-                toggleLoading('signup', true);
-                
-                const response = await makeApiRequest('/auth/signup', 'POST', {
-                    firstName,
-                    lastName,
-                    email,
-                    password,
-                    confirmPassword
-                });
-                
-                showNotification('Account created successfully! Please login.', 'success');
-                showLoginForm();
-                signupForm.reset();
-            } catch (error) {
-                console.error('Signup error:', error);
-            } finally {
-                toggleLoading('signup', false);
-            }
-        });
-        
-        // Forgot Password Modal Functionality
-        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
         const closeForgotPasswordModal = document.getElementById('closeForgotPasswordModal');
         const backToLoginLink = document.getElementById('backToLoginLink');
         const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-        
-        // Open forgot password modal
-        forgotPasswordLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            authModal.classList.remove('open');
-            forgotPasswordModal.classList.add('open');
-        });
-        
-        // Close forgot password modal
-        closeForgotPasswordModal.addEventListener('click', function() {
-            forgotPasswordModal.classList.remove('open');
-            body.classList.remove('no-scroll');
-        });
-        
-        // Back to login link
-        backToLoginLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            forgotPasswordModal.classList.remove('open');
-            authModal.classList.add('open');
-            showLoginForm();
-        });
-        
-        // Handle forgot password form submission
-        forgotPasswordForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('forgotEmail').value;
-            
-            if (!email) {
-                showNotification('Email is required', 'error');
-                return;
-            }
-            
-            try {
-                toggleLoading('forgot', true);
-                
-                const response = await makeApiRequest('/auth/forgot-password', 'POST', {
-                    email
-                });
-                
-                showNotification('If this email exists, a reset link has been sent', 'success');
-                forgotPasswordForm.reset();
-                forgotPasswordModal.classList.remove('open');
-            } catch (error) {
-                console.error('Forgot password error:', error);
-            } finally {
-                toggleLoading('forgot', false);
-            }
-        });
-        
-        // Checkout Modal Functionality
-        const checkoutModal = document.getElementById('checkoutModal');
-        const closeCheckoutModal = document.getElementById('closeCheckoutModal');
         const checkoutForm = document.getElementById('checkoutForm');
-        
+        const closeCheckoutModal = document.getElementById('closeCheckoutModal');
+
+        // Auth modal toggle
+        function showLoginForm() {
+            if (loginTab) loginTab.classList.add('active');
+            if (signupTab) signupTab.classList.remove('active');
+            if (loginForm) loginForm.style.display = 'block';
+            if (signupForm) signupForm.style.display = 'none';
+        }
+
+        function showSignupForm() {
+            if (loginTab) loginTab.classList.remove('active');
+            if (signupTab) signupTab.classList.add('active');
+            if (loginForm) loginForm.style.display = 'none';
+            if (signupForm) signupForm.style.display = 'block';
+        }
+
+        // Open auth modal
+        if (authButton) {
+            authButton.addEventListener('click', () => {
+                if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
+                    window.location.href = '#profile';
+                } else if (authModal) {
+                    authModal.classList.add('open');
+                    body.classList.add('no-scroll');
+                    showLoginForm();
+                }
+            });
+        }
+
+        if (mobileAuthButton) {
+            mobileAuthButton.addEventListener('click', () => {
+                if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
+                    window.location.href = '#profile';
+                } else if (authModal) {
+                    authModal.classList.add('open');
+                    body.classList.add('no-scroll');
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    if (mobileMenu) mobileMenu.classList.remove('open');
+                    showLoginForm();
+                }
+            });
+        }
+
+        // Close auth modal
+        if (closeAuthModal && authModal) {
+            closeAuthModal.addEventListener('click', () => {
+                authModal.classList.remove('open');
+                body.classList.remove('no-scroll');
+            });
+        }
+
+        // Switch between login/signup tabs
+        if (loginTab) {
+            loginTab.addEventListener('click', showLoginForm);
+        }
+
+        if (signupTab) {
+            signupTab.addEventListener('click', showSignupForm);
+        }
+
+        // Forgot password modal
+        if (forgotPasswordLink && forgotPasswordModal) {
+            forgotPasswordLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (authModal) authModal.classList.remove('open');
+                forgotPasswordModal.classList.add('open');
+            });
+        }
+
+        if (closeForgotPasswordModal && forgotPasswordModal) {
+            closeForgotPasswordModal.addEventListener('click', () => {
+                forgotPasswordModal.classList.remove('open');
+            });
+        }
+
+        if (backToLoginLink && forgotPasswordModal && authModal) {
+            backToLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                forgotPasswordModal.classList.remove('open');
+                authModal.classList.add('open');
+                showLoginForm();
+            });
+        }
+
+        // Form submissions
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail')?.value;
+                const password = document.getElementById('loginPassword')?.value;
+                
+                if (!email || !password) {
+                    showNotification('Email and password are required', 'error');
+                    return;
+                }
+                
+                try {
+                    toggleLoading('login', true);
+                    const response = await makeApiRequest('/api/auth/login', 'POST', {
+                        action: 'login',
+                        email,
+                        password
+                    });
+                    
+                    showNotification('Login successful!', 'success');
+                    setTimeout(() => window.location.reload(), 1500);
+                } catch (error) {
+                    console.error('Login error:', error);
+                } finally {
+                    toggleLoading('login', false);
+                }
+            });
+        }
+
+        if (signupForm) {
+            signupForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const firstName = document.getElementById('firstName')?.value;
+                const lastName = document.getElementById('lastName')?.value;
+                const email = document.getElementById('signupEmail')?.value;
+                const password = document.getElementById('signupPassword')?.value;
+                const confirmPassword = document.getElementById('confirmPassword')?.value;
+                
+                if (!firstName || !lastName || !email || !password || !confirmPassword) {
+                    showNotification('All fields are required', 'error');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    showNotification('Passwords do not match', 'error');
+                    return;
+                }
+                
+                try {
+                    toggleLoading('signup', true);
+                    const response = await makeApiRequest('/api/auth/signup', 'POST', {
+                        action: 'signup',
+                        firstName,
+                        lastName,
+                        email,
+                        password,
+                        confirmPassword
+                    });
+                    
+                    showNotification('Account created! Please login.', 'success');
+                    showLoginForm();
+                    signupForm.reset();
+                } catch (error) {
+                    console.error('Signup error:', error);
+                } finally {
+                    toggleLoading('signup', false);
+                }
+            });
+        }
+
+        if (forgotPasswordForm) {
+            forgotPasswordForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('forgotEmail')?.value;
+                
+                if (!email) {
+                    showNotification('Email is required', 'error');
+                    return;
+                }
+                
+                try {
+                    toggleLoading('forgot', true);
+                    const response = await makeApiRequest('/api/auth/forgot-password', 'POST', {
+                        action: 'forgot_password',
+                        email
+                    });
+                    
+                    showNotification('If email exists, reset link sent', 'success');
+                    forgotPasswordForm.reset();
+                    forgotPasswordModal.classList.remove('open');
+                } catch (error) {
+                    console.error('Forgot password error:', error);
+                } finally {
+                    toggleLoading('forgot', false);
+                }
+            });
+        }
+
+        if (checkoutForm) {
+            checkoutForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                try {
+                    if (cart.length === 0) {
+                        throw new Error('Your cart is empty');
+                    }
+                    
+                    const formData = {
+                        firstName: document.getElementById('checkoutFirstName')?.value,
+                        lastName: document.getElementById('checkoutLastName')?.value,
+                        phone: document.getElementById('checkoutPhone')?.value,
+                        address: document.getElementById('checkoutAddress')?.value,
+                        instructions: document.getElementById('checkoutInstructions')?.value,
+                        paymentMethod: document.querySelector('input[name="paymentMethod"]:checked')?.value,
+                        items: cart.map(item => ({
+                            id: item.id,
+                            quantity: item.quantity,
+                            price: item.price
+                        }))
+                    };
+                    
+                    // Validate required fields
+                    const required = ['firstName', 'lastName', 'phone', 'address'];
+                    for (const field of required) {
+                        if (!formData[field]) {
+                            throw new Error(`${field} is required`);
+                        }
+                    }
+                    
+                    toggleLoading('checkout', true);
+                    const response = await makeApiRequest('/api/orders', 'POST', formData);
+                    
+                    showNotification(`Order #${response.orderId} placed!`, 'success');
+                    
+                    // Clear cart
+                    cart.length = 0;
+                    cartCount = 0;
+                    if (cartBadge) {
+                        cartBadge.textContent = '0';
+                        cartBadge.classList.add('hidden');
+                    }
+                    updateCartUI();
+                    
+                    document.getElementById('checkoutModal')?.classList.remove('open');
+                    document.getElementById('cartModal')?.classList.add('hidden');
+                    body.classList.remove('no-scroll');
+                    checkoutForm.reset();
+                } catch (error) {
+                    showNotification(error.message, 'error');
+                } finally {
+                    toggleLoading('checkout', false);
+                }
+            });
+        }
+
         // Close checkout modal
-        closeCheckoutModal.addEventListener('click', function() {
-            checkoutModal.classList.remove('open');
-            body.classList.remove('no-scroll');
-        });
-        
-        // Close checkout modal when clicking outside
-        checkoutModal.addEventListener('click', function(e) {
-            if (e.target === checkoutModal) {
-                checkoutModal.classList.remove('open');
+        if (closeCheckoutModal) {
+            closeCheckoutModal.addEventListener('click', () => {
+                document.getElementById('checkoutModal')?.classList.remove('open');
                 body.classList.remove('no-scroll');
-            }
-        });
-        
-        // Handle checkout form submission
-        checkoutForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            // Gather form data
-            const formData = {
-                firstName: document.getElementById('checkoutFirstName').value,
-                lastName: document.getElementById('checkoutLastName').value,
-                phone: document.getElementById('checkoutPhone').value,
-                address: document.getElementById('checkoutAddress').value,
-                instructions: document.getElementById('checkoutInstructions').value,
-                paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
-                cartItems: cart.map(item => ({
-                    id: item.id,
-                    quantity: item.quantity,
-                    price: item.price
-                }))
-            };
-            
-            // Validate required fields
-            if (!formData.firstName || !formData.lastName || !formData.phone || !formData.address) {
-                showNotification('Please fill all required fields', 'error');
-                return;
-            }
-            
-            try {
-                toggleLoading('checkout', true);
-                
-                const response = await makeApiRequest('/orders', 'POST', formData);
-                
-                // Show success message
-                showNotification(`Order placed successfully! Your order ID: ${response.orderId}`, 'success');
-                
-                // Clear cart and close modals
-                cart.length = 0;
-                cartCount = 0;
-                cartBadge.textContent = '0';
-                updateCartUI();
-                
-                checkoutModal.classList.remove('open');
-                cartModal.classList.add('hidden');
-                body.classList.remove('no-scroll');
-                
-                // Clear the form
-                checkoutForm.reset();
-            } catch (error) {
-                console.error('Checkout error:', error);
-            } finally {
-                toggleLoading('checkout', false);
-            }
-        });
-        
+            });
+        }
+
         // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load menu items
+        document.addEventListener('DOMContentLoaded', () => {
             loadMenuItems();
             
-            // Update auth button based on login status
             if (<?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>) {
-                authButton.textContent = 'My Account';
-                mobileAuthButton.textContent = 'My Account';
+                if (authButton) authButton.textContent = 'My Account';
+                if (mobileAuthButton) mobileAuthButton.textContent = 'My Account';
+            }
+            
+            if (cartBadge) {
+                cartBadge.textContent = cartCount;
+                cartBadge.classList.toggle('hidden', cartCount === 0);
             }
         });
     </script>
